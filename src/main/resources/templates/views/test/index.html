@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <script src="/layui/layui.js"></script>
+    <script type="text/javascript" src="/js/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+<div class="layui-card">
+    <div class="layui-card-header">测试列表</div>
+    <div class="layui-card-body">
+        <form class="layui-form">
+            <div class="layui-inline">
+                <div class="layui-input-inline">
+                    <button class="layui-btn" lay-submit lay-filter="searchForm">刷新数据</button>
+                </div>
+            </div>
+        </form>
+
+        <table id="userTable" lay-filter="test"></table>
+
+        <script type="text/javascript">
+            layui.use(['table', 'form', 'layer'], function () {
+
+                layui.form.on('submit(searchForm)', function (data) {
+                    tableInstance.config.request = Object.assign(tableInstance.config.request, data.field)
+                    tableInstance.reload()
+                    return false
+                })
+
+                //第一个实例
+                let tableInstance = layui.table.render({
+                    elem: '#userTable'
+                    , height: 500
+                    , url: '/component/findAll' //数据接口
+                    , page: true //开启分页
+                    , parseData: function (res) {
+                        res.count = res.data.count
+                        res.data = res.data.rows
+                        return res
+                    }
+                    , response: {
+                        statusName: 'code' //规定数据状态的字段名称，默认：code
+                        , statusCode: 20000 //规定成功的状态码，默认：0
+                        , msgName: 'message' //规定状态信息的字段名称，默认：msg
+                        , countName: 'count' //规定数据总数的字段名称，默认：count
+                        , dataName: 'data' //规定数据列表的字段名称，默认：data
+                    }
+                    , cols: [[ //表头
+                        {field: 'id', title: 'ID', width: 180},
+                        {field: 'name', title: '标题', width: 160},
+                        {field: 'description', title: '描述', width: 160},
+                        {field: 'status', title: '状态', width: 160},
+                        {field: 'create', title: '创建时间', sort: true},
+                        {
+                            title: '操作',
+                            fixed: 'right',
+                            width: 180,
+                            templet: '<div><button type="button" class="layui-btn layui-btn-sm" onclick="updateModel(`{{d.id}}`)"><i class="layui-icon">&#xe642;</i></button><button type="button" class="layui-btn layui-btn-danger layui-btn-sm" onclick="removeModel(`{{d.id}}`)" ><i class="layui-icon">&#xe640;</i></button></div>'
+                        }
+                    ]]
+                });
+
+                window.showModel = function (url) {
+                    layui.layer.open({
+                        type: 2,
+                        content: url
+                    });
+                }
+
+                window.updateModel = function (id) {
+                    $.post(`/component/query/${id}`, function (res) {
+                        layui.layer.open({
+                            type: 2,
+                            content: '/views/component/add.html', //数组第二项即吸附元素选择器或者DOM
+                            area: ['700px', '300px'],
+                            maxmin: true,
+                            title: 'INFO',
+                            shade: false,
+                            zIndex: layer.zIndex,
+                            success: function (layero, index) {
+                                layer.setTop(layero);
+                                layer.iframeAuto(index)
+                                let body = layer.getChildFrame('body', index);
+                                let iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                $.each(res.data.component, function (key, value) {
+                                    body.find(`input[name=${key}]`).val(value)
+                                    body.find(`textarea[name=${key}]`).val(value)
+                                })
+                                iframeWin.requestURL = "/component/update"
+                            },
+                        });
+                    })
+                }
+
+                window.removeModel = function (id) {
+                    $.get(`/component/remove/${id}`, function (res) {
+                        if (res.success) {
+                            layui.layer.msg(res.message)
+                            tableInstance.reload()
+                        } else {
+                            layui.layer.msg(res.message)
+                        }
+                    })
+                }
+
+            });
+        </script>
+
+    </div>
+</div>
+</body>
+</html>

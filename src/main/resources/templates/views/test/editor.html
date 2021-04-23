@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <script type="text/javascript" src="/js/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+
+<div class="layui-card">
+    <div class="layui-card-header">编辑测试信息</div>
+    <div class="layui-card-body">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="hidden" name="id">
+                    <input type="text" name="name"  placeholder="请输入组件名字"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">描述</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="选填" name="data"
+                              class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">测试方案</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="like[write]" title="单元测试" checked>
+                    <input type="checkbox" name="like[read]" title="集成测试" >
+                    <input type="checkbox" name="like[dai]" title="性能测试">
+                    <input type="checkbox" name="like[dai]" title="验收测试">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">接口</label>
+                <div class="layui-input-block">
+                    <input type="url" name="url" value="http://runnersoftware5.cn.utools.club/hospital_manager/test" class="layui-input" placeholder="接口地址">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">请求方式</label>
+                <div class="layui-input-block">
+                    <select name="method">
+                        <option>GET</option>
+                        <option>POST</option>
+                        <option>PUT</option>
+                        <option>DELETE</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">参数类型</label>
+                <div class="layui-input-block">
+                   <select>
+                       <option>FormData</option>
+                       <option selected>Json</option>
+                   </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">请求参数</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="请输入请求参数" name="params" required lay-verify="required" class="layui-textarea" >
+                        {
+                            "param1": "test"
+                        }
+                    </textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">期望值</label>
+                <div class="layui-input-block">
+                    <input type="hidden" name="id">
+                    <input type="text" name="expect" required lay-verify="required" placeholder="请输入返回期望值"
+                           autocomplete="off" class="layui-input" value={"code":20001,"message":"成功","success":true,"data":{}}>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="designerForm">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--<ul class="layui-timeline">-->
+<!--    <li class="layui-timeline-item">-->
+<!--        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>-->
+<!--        <div class="layui-timeline-content layui-text">-->
+<!--            <h3 class="layui-timeline-title">8月18日</h3>-->
+<!--            <p>-->
+<!--                layui 2.0 的一切准备工作似乎都已到位。发布之弦，一触即发。-->
+<!--                <br>不枉近百个日日夜夜与之为伴。因小而大，因弱而强。-->
+<!--                <br>无论它能走多远，抑或如何支撑？至少我曾倾注全心，无怨无悔 <i class="layui-icon"></i>-->
+<!--            </p>-->
+<!--        </div>-->
+<!--    </li>-->
+<!--    <li class="layui-timeline-item">-->
+<!--        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>-->
+<!--        <div class="layui-timeline-content layui-text">-->
+<!--            <h3 class="layui-timeline-title">8月16日</h3>-->
+<!--            <p>杜甫的思想核心是儒家的仁政思想，他有“<em>致君尧舜上，再使风俗淳</em>”的宏伟抱负。个人最爱的名篇有：</p>-->
+<!--            <ul>-->
+<!--                <li>《登高》</li>-->
+<!--                <li>《茅屋为秋风所破歌》</li>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--    </li>-->
+<!--    <li class="layui-timeline-item">-->
+<!--        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>-->
+<!--        <div class="layui-timeline-content layui-text">-->
+<!--            <h3 class="layui-timeline-title">8月15日</h3>-->
+<!--            <p>-->
+<!--                中国人民抗日战争胜利72周年-->
+<!--                <br>常常在想，尽管对这个国家有这样那样的抱怨，但我们的确生在了最好的时代-->
+<!--                <br>铭记、感恩-->
+<!--                <br>所有为中华民族浴血奋战的英雄将士-->
+<!--                <br>永垂不朽-->
+<!--            </p>-->
+<!--        </div>-->
+<!--    </li>-->
+<!--    <li class="layui-timeline-item">-->
+<!--        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>-->
+<!--        <div class="layui-timeline-content layui-text">-->
+<!--            <div class="layui-timeline-title">过去</div>-->
+<!--        </div>-->
+<!--    </li>-->
+<!--</ul>-->
+
+
+<script>
+    //Demo
+    var requestURL = '/test/execute'
+
+    layui.use(['form', 'layer'], function () {
+        var form = layui.form;
+        var layer = layui.layer;
+
+        let loading = null
+
+
+        //监听提交
+        form.on('submit(designerForm)', function (data) {
+            // layer.msg(JSON.stringify(data.field));
+            loading = layer.load()
+            $.post(requestURL, data.field, function (res) {
+                document.querySelector('.layui-form').reset()
+                layui.layer.msg(res.message)
+                layer.close(loading)
+            })
+            return false;
+        });
+
+        $.get("/control/findAll?page=1&limit=9999999", function (res){
+            res.data.rows.forEach(item =>{
+                let option = new Option(item.name, item.id)
+                $('select[name=controllerId]').append(option)
+            })
+            form.render('select')
+        })
+
+    });
+
+</script>
+
+</body>
+</html>
