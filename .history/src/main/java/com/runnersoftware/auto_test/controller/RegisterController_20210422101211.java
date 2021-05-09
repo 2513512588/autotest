@@ -17,12 +17,10 @@ public class RegisterController {
         if(!StringUtils.isEmpty(username)&&"123".equals(password))
         {
             session.setAttribute("loginUser",username);
-            return "index";
+            return {"index","editor"};
         }else{
             model.addAttribute("msg", "用户名或者密码错误");
             return "login";
         }
     }
-
-
 }

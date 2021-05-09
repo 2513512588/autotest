@@ -26,6 +26,7 @@ public class UnitTestServiceImpl implements TestService{
         // javqComile 是java程序里的java编译器类
         JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 
+
         // StandardJavaFileManager 对象主要负责
         // 编译文件对象的创建，编译的参数等等，我们只对它做些基本设置比如编译 CLASSPATH 等。
         StandardJavaFileManager standardJavaFileManager = javaCompiler.getStandardFileManager(null, null, null);
@@ -52,6 +53,12 @@ public class UnitTestServiceImpl implements TestService{
         // 将Class 在内存中编译
         Boolean result = task.call();
 
+        if (!result){
+            throw new Exception("编译失败!");
+        }
+
+        System.out.println();
+
         // 通过类名 加载class
         ClassLoader classLoader = new ClassClassLoader(getClass().getClassLoader());
 //        ClassLoader classLoader = getClass().getClassLoader();
@@ -66,7 +73,10 @@ public class UnitTestServiceImpl implements TestService{
         Method method = cls.getMethod(methodName, Object[].class);
         method.setAccessible(true);
 
-        return expect.equals(method.invoke(null, objects).toString());
+        String result1 = method.invoke(null, objects).toString();
+        System.out.println("result1 = " + result1);
+//        return expect.equals(result1);
+        return  result1.equals(expect);
     }
 
 
