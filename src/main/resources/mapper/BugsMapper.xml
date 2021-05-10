@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.runnersoftware.auto_test.mapper.BugsMapper">
+
+    <resultMap type="com.runnersoftware.auto_test.model.Bugs" id="BugsMap">
+        <result property="bugId" column="bug_id" jdbcType="VARCHAR"/>
+        <result property="assignedTo" column="assigned_to" jdbcType="VARCHAR"/>
+        <result property="bugFileLoc" column="bug_file_loc" jdbcType="VARCHAR"/>
+        <result property="bugSeverity" column="bug_severity" jdbcType="VARCHAR"/>
+        <result property="bugStatus" column="bug_status" jdbcType="VARCHAR"/>
+        <result property="creationTs" column="creation_ts" jdbcType="TIMESTAMP"/>
+        <result property="deltaTs" column="delta_ts" jdbcType="TIMESTAMP"/>
+        <result property="shortDesc" column="short_desc" jdbcType="VARCHAR"/>
+        <result property="opSys" column="op_sys" jdbcType="VARCHAR"/>
+        <result property="priority" column="priority" jdbcType="VARCHAR"/>
+        <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+        <result property="repPlatform" column="rep_platform" jdbcType="VARCHAR"/>
+        <result property="reporter" column="reporter" jdbcType="VARCHAR"/>
+        <result property="version" column="version" jdbcType="VARCHAR"/>
+        <result property="componentId" column="component_id" jdbcType="VARCHAR"/>
+        <result property="resolution" column="resolution" jdbcType="VARCHAR"/>
+        <result property="targetMilestone" column="target_milestone" jdbcType="VARCHAR"/>
+        <result property="qaContact" column="qa_contact" jdbcType="VARCHAR"/>
+        <result property="statusWhiteboard" column="status_whiteboard" jdbcType="VARCHAR"/>
+        <result property="lastdiffed" column="lastdiffed" jdbcType="TIMESTAMP"/>
+        <result property="everconfirmed" column="everconfirmed" jdbcType="INTEGER"/>
+        <result property="reporterAccessible" column="reporter_accessible" jdbcType="INTEGER"/>
+        <result property="cclistAccessible" column="cclist_accessible" jdbcType="INTEGER"/>
+        <result property="estimatedTime" column="estimated_time" jdbcType="NUMERIC"/>
+        <result property="remainingTime" column="remaining_time" jdbcType="NUMERIC"/>
+        <result property="deadline" column="deadline" jdbcType="TIMESTAMP"/>
+        <result property="alias" column="alias" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BugsMap">
+        select bug_id,
+               assigned_to,
+               bug_file_loc,
+               bug_severity,
+               bug_status,
+               creation_ts,
+               delta_ts,
+               short_desc,
+               op_sys,
+               priority,
+               product_id,
+               rep_platform,
+               reporter,
+               version,
+               component_id,
+               resolution,
+               target_milestone,
+               qa_contact,
+               status_whiteboard,
+               lastdiffed,
+               everconfirmed,
+               reporter_accessible,
+               cclist_accessible,
+               estimated_time,
+               remaining_time,
+               deadline,
+               alias
+        from bugs.bugs
+        where bug_id = #{bugId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BugsMap">
+        select bug_id,
+               assigned_to,
+               bug_file_loc,
+               bug_severity,
+               bug_status,
+               creation_ts,
+               delta_ts,
+               short_desc,
+               op_sys,
+               priority,
+               product_id,
+               rep_platform,
+               reporter,
+               version,
+               component_id,
+               resolution,
+               target_milestone,
+               qa_contact,
+               status_whiteboard,
+               lastdiffed,
+               everconfirmed,
+               reporter_accessible,
+               cclist_accessible,
+               estimated_time,
+               remaining_time,
+               deadline,
+               alias
+        from bugs.bugs
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BugsMap">
+        select
+        bug_id, assigned_to, bug_file_loc, bug_severity, bug_status, creation_ts, delta_ts, short_desc, op_sys,
+        priority, product_id, rep_platform, reporter, version, component_id, resolution, target_milestone, qa_contact,
+        status_whiteboard, lastdiffed, everconfirmed, reporter_accessible, cclist_accessible, estimated_time,
+        remaining_time, deadline, alias
+        from bugs.bugs
+        <where>
+            <if test="bugId != null">
+                and bug_id = #{bugId}
+            </if>
+            <if test="assignedTo != null">
+                and assigned_to = #{assignedTo}
+            </if>
+            <if test="bugFileLoc != null">
+                and bug_file_loc = #{bugFileLoc}
+            </if>
+            <if test="bugSeverity != null and bugSeverity != ''">
+                and bug_severity = #{bugSeverity}
+            </if>
+            <if test="bugStatus != null and bugStatus != ''">
+                and bug_status = #{bugStatus}
+            </if>
+            <if test="creationTs != null">
+                and creation_ts = #{creationTs}
+            </if>
+            <if test="deltaTs != null">
+                and delta_ts = #{deltaTs}
+            </if>
+            <if test="shortDesc != null and shortDesc != ''">
+                and short_desc = #{shortDesc}
+            </if>
+            <if test="opSys != null and opSys != ''">
+                and op_sys = #{opSys}
+            </if>
+            <if test="priority != null and priority != ''">
+                and priority = #{priority}
+            </if>
+            <if test="productId != null">
+                and product_id = #{productId}
+            </if>
+            <if test="repPlatform != null and repPlatform != ''">
+                and rep_platform = #{repPlatform}
+            </if>
+            <if test="reporter != null">
+                and reporter = #{reporter}
+            </if>
+            <if test="version != null and version != ''">
+                and version = #{version}
+            </if>
+            <if test="componentId != null">
+                and component_id = #{componentId}
+            </if>
+            <if test="resolution != null and resolution != ''">
+                and resolution = #{resolution}
+            </if>
+            <if test="targetMilestone != null and targetMilestone != ''">
+                and target_milestone = #{targetMilestone}
+            </if>
+            <if test="qaContact != null">
+                and qa_contact = #{qaContact}
+            </if>
+            <if test="statusWhiteboard != null">
+                and status_whiteboard = #{statusWhiteboard}
+            </if>
+            <if test="lastdiffed != null">
+                and lastdiffed = #{lastdiffed}
+            </if>
+            <if test="everconfirmed != null">
+                and everconfirmed = #{everconfirmed}
+            </if>
+            <if test="reporterAccessible != null">
+                and reporter_accessible = #{reporterAccessible}
+            </if>
+            <if test="cclistAccessible != null">
+                and cclist_accessible = #{cclistAccessible}
+            </if>
+            <if test="estimatedTime != null">
+                and estimated_time = #{estimatedTime}
+            </if>
+            <if test="remainingTime != null">
+                and remaining_time = #{remainingTime}
+            </if>
+            <if test="deadline != null">
+                and deadline = #{deadline}
+            </if>
+            <if test="alias != null and alias != ''">
+                and alias = #{alias}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="bugId" useGeneratedKeys="true">
+        insert into bugs.bugs(assigned_to, bug_file_loc, bug_severity, bug_status, creation_ts, delta_ts, short_desc,
+                              op_sys, priority, product_id, rep_platform, reporter, version, component_id, resolution,
+                              target_milestone, qa_contact, status_whiteboard, lastdiffed, everconfirmed,
+                              reporter_accessible, cclist_accessible, estimated_time, remaining_time, deadline, alias)
+        values (#{assignedTo}, #{bugFileLoc}, #{bugSeverity}, #{bugStatus}, #{creationTs}, #{deltaTs}, #{shortDesc},
+                #{opSys}, #{priority}, #{productId}, #{repPlatform}, #{reporter}, #{version}, #{componentId},
+                #{resolution}, #{targetMilestone}, #{qaContact}, #{statusWhiteboard}, #{lastdiffed}, #{everconfirmed},
+                #{reporterAccessible}, #{cclistAccessible}, #{estimatedTime}, #{remainingTime}, #{deadline}, #{alias})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="bugId" useGeneratedKeys="true">
+        insert into bugs.bugs(assigned_to, bug_file_loc, bug_severity, bug_status, creation_ts, delta_ts, short_desc,
+        op_sys, priority, product_id, rep_platform, reporter, version, component_id, resolution, target_milestone,
+        qa_contact, status_whiteboard, lastdiffed, everconfirmed, reporter_accessible, cclist_accessible,
+        estimated_time, remaining_time, deadline, alias)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.assignedTo}, #{entity.bugFileLoc}, #{entity.bugSeverity}, #{entity.bugStatus},
+            #{entity.creationTs}, #{entity.deltaTs}, #{entity.shortDesc}, #{entity.opSys}, #{entity.priority},
+            #{entity.productId}, #{entity.repPlatform}, #{entity.reporter}, #{entity.version}, #{entity.componentId},
+            #{entity.resolution}, #{entity.targetMilestone}, #{entity.qaContact}, #{entity.statusWhiteboard},
+            #{entity.lastdiffed}, #{entity.everconfirmed}, #{entity.reporterAccessible}, #{entity.cclistAccessible},
+            #{entity.estimatedTime}, #{entity.remainingTime}, #{entity.deadline}, #{entity.alias})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="bugId" useGeneratedKeys="true">
+        insert into bugs.bugs(assigned_to, bug_file_loc, bug_severity, bug_status, creation_ts, delta_ts, short_desc,
+        op_sys, priority, product_id, rep_platform, reporter, version, component_id, resolution, target_milestone,
+        qa_contact, status_whiteboard, lastdiffed, everconfirmed, reporter_accessible, cclist_accessible,
+        estimated_time, remaining_time, deadline, alias)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.assignedTo}, #{entity.bugFileLoc}, #{entity.bugSeverity}, #{entity.bugStatus},
+            #{entity.creationTs}, #{entity.deltaTs}, #{entity.shortDesc}, #{entity.opSys}, #{entity.priority},
+            #{entity.productId}, #{entity.repPlatform}, #{entity.reporter}, #{entity.version}, #{entity.componentId},
+            #{entity.resolution}, #{entity.targetMilestone}, #{entity.qaContact}, #{entity.statusWhiteboard},
+            #{entity.lastdiffed}, #{entity.everconfirmed}, #{entity.reporterAccessible}, #{entity.cclistAccessible},
+            #{entity.estimatedTime}, #{entity.remainingTime}, #{entity.deadline}, #{entity.alias})
+        </foreach>
+        on duplicate key update
+        assigned_to = values(assigned_to) , bug_file_loc = values(bug_file_loc) , bug_severity = values(bug_severity) ,
+        bug_status = values(bug_status) , creation_ts = values(creation_ts) , delta_ts = values(delta_ts) , short_desc =
+        values(short_desc) , op_sys = values(op_sys) , priority = values(priority) , product_id = values(product_id) ,
+        rep_platform = values(rep_platform) , reporter = values(reporter) , version = values(version) , component_id =
+        values(component_id) , resolution = values(resolution) , target_milestone = values(target_milestone) ,
+        qa_contact = values(qa_contact) , status_whiteboard = values(status_whiteboard) , lastdiffed =
+        values(lastdiffed) , everconfirmed = values(everconfirmed) , reporter_accessible = values(reporter_accessible) ,
+        cclist_accessible = values(cclist_accessible) , estimated_time = values(estimated_time) , remaining_time =
+        values(remaining_time) , deadline = values(deadline) , alias = values(alias)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update bugs.bugs
+        <set>
+            <if test="assignedTo != null">
+                assigned_to = #{assignedTo},
+            </if>
+            <if test="bugFileLoc != null">
+                bug_file_loc = #{bugFileLoc},
+            </if>
+            <if test="bugSeverity != null and bugSeverity != ''">
+                bug_severity = #{bugSeverity},
+            </if>
+            <if test="bugStatus != null and bugStatus != ''">
+                bug_status = #{bugStatus},
+            </if>
+            <if test="creationTs != null">
+                creation_ts = #{creationTs},
+            </if>
+            <if test="deltaTs != null">
+                delta_ts = #{deltaTs},
+            </if>
+            <if test="shortDesc != null and shortDesc != ''">
+                short_desc = #{shortDesc},
+            </if>
+            <if test="opSys != null and opSys != ''">
+                op_sys = #{opSys},
+            </if>
+            <if test="priority != null and priority != ''">
+                priority = #{priority},
+            </if>
+            <if test="productId != null">
+                product_id = #{productId},
+            </if>
+            <if test="repPlatform != null and repPlatform != ''">
+                rep_platform = #{repPlatform},
+            </if>
+            <if test="reporter != null">
+                reporter = #{reporter},
+            </if>
+            <if test="version != null and version != ''">
+                version = #{version},
+            </if>
+            <if test="componentId != null">
+                component_id = #{componentId},
+            </if>
+            <if test="resolution != null and resolution != ''">
+                resolution = #{resolution},
+            </if>
+            <if test="targetMilestone != null and targetMilestone != ''">
+                target_milestone = #{targetMilestone},
+            </if>
+            <if test="qaContact != null">
+                qa_contact = #{qaContact},
+            </if>
+            <if test="statusWhiteboard != null">
+                status_whiteboard = #{statusWhiteboard},
+            </if>
+            <if test="lastdiffed != null">
+                lastdiffed = #{lastdiffed},
+            </if>
+            <if test="everconfirmed != null">
+                everconfirmed = #{everconfirmed},
+            </if>
+            <if test="reporterAccessible != null">
+                reporter_accessible = #{reporterAccessible},
+            </if>
+            <if test="cclistAccessible != null">
+                cclist_accessible = #{cclistAccessible},
+            </if>
+            <if test="estimatedTime != null">
+                estimated_time = #{estimatedTime},
+            </if>
+            <if test="remainingTime != null">
+                remaining_time = #{remainingTime},
+            </if>
+            <if test="deadline != null">
+                deadline = #{deadline},
+            </if>
+            <if test="alias != null and alias != ''">
+                alias = #{alias},
+            </if>
+        </set>
+        where bug_id = #{bugId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from bugs.bugs
+        where bug_id = #{bugId}
+    </delete>
+
+</mapper>
+
