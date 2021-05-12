@@ -1,4 +1,4 @@
-package com.runnersoftware.auto_test.util;
+package com.runnersoftware.auto_test.utils;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

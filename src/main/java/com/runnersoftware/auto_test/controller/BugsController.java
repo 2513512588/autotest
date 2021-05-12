@@ -1,7 +1,7 @@
 package com.runnersoftware.auto_test.controller;
 
 import com.runnersoftware.auto_test.service.BugsService;
-import com.runnersoftware.auto_test.util.R;
+import com.runnersoftware.auto_test.utils.R;
 import org.springframework.web.bind.annotation.*;
 import com.runnersoftware.auto_test.model.Bugs;
 

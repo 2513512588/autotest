@@ -10,3 +10,6 @@ server:
   port: 8095
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
+manager:
+  username: root
+  password: $2a$10$ZKSOz0KVH8xCGF9Osy0cleVaLixa5ipoaFseVzUWMzdGJnKbwKUNq

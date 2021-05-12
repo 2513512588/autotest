@@ -12,10 +12,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.header.HeaderWriter;
 import org.springframework.security.web.header.HeaderWriterFilter;
 
@@ -34,7 +36,7 @@ import java.util.List;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
-    PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
@@ -59,14 +61,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-       http.csrf().disable().cors().disable().authorizeRequests().anyRequest().permitAll()
-       .and().formLogin().loginPage("/").loginProcessingUrl("/login").defaultSuccessUrl("/backstage").failureHandler(new AuthenticationFailureHandler() {
+       http.csrf().disable().cors().disable().authorizeRequests().anyRequest().authenticated()
+       .and().formLogin().loginPage("/ui/login").loginProcessingUrl("/login").successHandler(new AuthenticationSuccessHandler() {
+           @Override
+           public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+               httpServletResponse.sendRedirect("/backstage");
+           }
+       }).failureHandler(new AuthenticationFailureHandler() {
            @Override
            public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-               httpServletResponse.sendRedirect( httpServletRequest.getContextPath() +"/?error=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
+               httpServletResponse.sendRedirect("/ui/login?error=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
            }
        })
-       .and().logout().logoutUrl("/logout").logoutSuccessUrl("/");
+       .and().logout().logoutUrl("/logout").logoutSuccessUrl("/ui/login");
 
         HeaderWriter headerWriter = new HeaderWriter() {
             @Override
@@ -88,6 +95,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/assert/**", "/register", "/user/create", "/");
+        web.ignoring().antMatchers("/css/**", "/img/**", "/js/**", "/layui/**", "/ui/login", "/");
     }
 }

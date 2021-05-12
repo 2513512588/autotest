@@ -3,8 +3,8 @@ package com.runnersoftware.auto_test.controller;
 import com.runnersoftware.auto_test.model.Bugs;
 import com.runnersoftware.auto_test.service.BugsService;
 import com.runnersoftware.auto_test.service.TestService;
-import com.runnersoftware.auto_test.util.HttpUtil;
-import com.runnersoftware.auto_test.util.R;
+import com.runnersoftware.auto_test.utils.HttpUtil;
+import com.runnersoftware.auto_test.utils.R;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
-import java.util.Date;
 import java.util.Map;
 
 @RestController

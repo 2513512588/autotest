@@ -1,7 +1,7 @@
 package com.runnersoftware.auto_test.controller;
 
-import com.runnersoftware.auto_test.util.HttpUtil;
-import com.runnersoftware.auto_test.util.R;
+import com.runnersoftware.auto_test.utils.HttpUtil;
+import com.runnersoftware.auto_test.utils.R;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
