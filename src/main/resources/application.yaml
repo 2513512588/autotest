@@ -6,6 +6,9 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/bugs?characterEncoding=UTF-8&serverTimezone=GMT%2b8
     username: root
     password: 960918
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 server:
   port: 8095
 mybatis:

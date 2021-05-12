@@ -34,7 +34,7 @@
                 let tableInstance = layui.table.render({
                     elem: '#userTable'
                     , height: 500
-                    , url: '/component/findAll' //数据接口
+                    , url: '/user/findAll' //数据接口
                     , page: true //开启分页
                     , parseData: function (res) {
                         res.count = res.data.count
@@ -50,9 +50,8 @@
                     }
                     , cols: [[ //表头
                         {field: 'id', title: 'ID', width: 180},
-                        {field: 'name', title: '用户名', width: 160},
-                        {field: 'username', title: '密码', width: 160},
-                        {field: 'create', title: '创建时间', sort: true},
+                        {field: 'username', title: '用户名', width: 160},
+                        {field: 'createTime', title: '创建时间', sort: true},
                         {
                             title: '操作',
                             fixed: 'right',
@@ -70,10 +69,10 @@
                 }
 
                 window.updateModel = function (id) {
-                    $.post(`/component/query/${id}`, function (res) {
+                    $.post(`/user/query/${id}`, function (res) {
                         layui.layer.open({
                             type: 2,
-                            content: '/views/component/add.html', //数组第二项即吸附元素选择器或者DOM
+                            content: '/views/user/editor.html', //数组第二项即吸附元素选择器或者DOM
                             area: ['700px', '300px'],
                             maxmin: true,
                             title: 'INFO',
@@ -88,14 +87,14 @@
                                     body.find(`input[name=${key}]`).val(value)
                                     body.find(`textarea[name=${key}]`).val(value)
                                 })
-                                iframeWin.requestURL = "/component/update"
+                                iframeWin.requestURL = "/user/update"
                             },
                         });
                     })
                 }
 
                 window.removeModel = function (id) {
-                    $.get(`/component/remove/${id}`, function (res) {
+                    $.get(`/user/remove/${id}`, function (res) {
                         if (res.success) {
                             layui.layer.msg(res.message)
                             tableInstance.reload()

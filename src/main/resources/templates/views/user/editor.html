@@ -17,14 +17,14 @@
                 <label class="layui-form-label">用户名</label>
                 <div class="layui-input-block">
                     <input type="hidden" name="id">
-                    <input type="text" name="name" required lay-verify="required" placeholder="请输入用户名"
+                    <input type="text" name="username" required lay-verify="required" placeholder="请输入用户名"
                            autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">密码</label>
                 <div class="layui-input-block">
-                    <input type="text" name="name" required lay-verify="required" placeholder="请输入密码"
+                    <input type="text" name="password" required lay-verify="required" placeholder="请输入密码"
                            autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -40,7 +40,7 @@
 
 <script>
     //Demo
-    var requestURL = '/component/create'
+    var requestURL = '/user/create'
 
     layui.use('form', function () {
         var form = layui.form;
@@ -55,13 +55,6 @@
             return false;
         });
 
-        $.get("/control/findAll?page=1&limit=9999999", function (res){
-            res.data.rows.forEach(item =>{
-                let option = new Option(item.name, item.id)
-                $('select[name=controllerId]').append(option)
-            })
-            form.render('select')
-        })
 
     });
 

@@ -1,7 +1,7 @@
 package com.runnersoftware.auto_test.config;
 
 
-import com.runnersoftware.auto_test.service.IUserService;
+import com.runnersoftware.auto_test.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,11 +46,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    private IUserService userService;
+    private UserService userService;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public void setUserService(IUserService userService) {
+    public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
