@@ -1,28 +1,39 @@
 package com.runnersoftware.auto_test.service.Impl;
 
+import com.runnersoftware.auto_test.model.Bugs;
+import com.runnersoftware.auto_test.service.BugsService;
 import com.runnersoftware.auto_test.service.TimerTaskService;
+import com.runnersoftware.auto_test.utils.EmailProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.search.FromTerm;
+import javax.mail.search.SearchTerm;
 
+import java.io.IOException;
 import java.util.Properties;
-import java.util.regex.Pattern;
 
-import static java.util.regex.Pattern.*;
 
 @Slf4j
 @Configuration
 @EnableScheduling
 public class TimerTaskServiceImpl implements TimerTaskService {
 
+    @Autowired
+    private BugsService bugsService;
+
     /**
      * 接收邮件
      */
     @Scheduled(cron="0/10 * * * * ? ")
-    public void timerTaskInfo() throws MessagingException {
+    public void timerTaskInfo() throws MessagingException, IOException {
 
         Properties props = new Properties();
         props.setProperty("mail.store.protocol", "pop3");
@@ -36,47 +47,37 @@ public class TimerTaskServiceImpl implements TimerTaskService {
         Store store = session.getStore("pop3");
 
         // 连接邮件服务器
-        store.connect("2513512588@qq.com", "pgkyvgtdqxcedjih");
+        store.connect(EmailProperties.USERNAME, EmailProperties.PASSWORD);
 
         // 获得收件箱
         Folder folder = store.getFolder("INBOX");
         // 以读写模式打开收件箱
         folder.open(Folder.READ_WRITE);
 
-        // 获得收件箱的邮件列表
-        Message[] messages = folder.getMessages();
-
-        // 打印不同状态的邮件数量
-        System.out.println("收件箱中共" + messages.length + "封邮件!");
-        System.out.println("收件箱中共" + folder.getUnreadMessageCount() + "封未读邮件!");
-        System.out.println("收件箱中共" + folder.getNewMessageCount() + "封新邮件!");
-        System.out.println("收件箱中共" + folder.getDeletedMessageCount() + "封已删除邮件!");
-
-        System.out.println("------------------------开始解析邮件----------------------------------");
-
-
-        int total = folder.getMessageCount();
-        System.out.println("-----------------您的邮箱共有邮件：" + total + " 封--------------");
+        SearchTerm sender = new FromTerm(new InternetAddress(EmailProperties.SENDER));
+        Message[] msgs = folder.search(sender);
         // 得到收件箱文件夹信息，获取邮件列表
-        Message[] msgs = folder.getMessages();
-        System.out.println("\t收件箱的总邮件数：" + msgs.length);
-        for (int i = 0; i < total; i++) {
-            Message a = msgs[i];
-            //   获取邮箱邮件名字及时间
-            Address[] replyTo = a.getReplyTo();
-            Pattern compile = compile("<?<=\\[><\\S+><?=\\]>");
-            System.out.println("replyTo = " + replyTo[replyTo.length - 1].toString());
-            System.out.println("compile= " + compile.matcher(replyTo[replyTo.length - 1].toString()));
-            System.out.println("==============");
+        for (int i = 0; i < msgs.length; i++) {
+            Message msg = msgs[i];
+            System.out.println("msg.getSubject() = " + msg.getSubject());
+            String email = msg.getFrom()[0].toString();
+            if (EmailProperties.SENDER.equals(email)){
+                //只查看未读邮件
+                if (!msg.getFlags().contains(Flags.Flag.SEEN)){
+                    Document document = Jsoup.parse(msg.getContent().toString());
+                    Bugs bugs = Bugs.buildDefault(document.text());
+                    bugsService.insert(bugs);
+                    //邮件已读
+                    msg.setFlag(Flags.Flag.SEEN, true);
+                }
+            }
 
         }
-        System.out.println("\t未读邮件数：" + folder.getUnreadMessageCount());
-        System.out.println("\t新邮件数：" + folder.getNewMessageCount());
-        System.out.println("----------------End------------------");
-
         // 关闭资源
         folder.close(false);
         store.close();
     }
+
+
 
 }
