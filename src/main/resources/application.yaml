@@ -9,6 +9,20 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  mail:
+    port: 25
+    username: 2513512588@qq.com
+    password: pgkyvgtdqxcedjih
+    protocol: smtp
+    default-encoding: utf-8
+    host: smtp.qq.com
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
 server:
   port: 8095
 mybatis:
@@ -16,3 +30,4 @@ mybatis:
 manager:
   username: root
   password: $2a$10$ZKSOz0KVH8xCGF9Osy0cleVaLixa5ipoaFseVzUWMzdGJnKbwKUNq
+
