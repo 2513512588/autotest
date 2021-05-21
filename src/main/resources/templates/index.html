@@ -58,6 +58,7 @@
                         <dd><a href="/views/test/editor.html">性能测试</a></dd>
                         <dd><a href="/views/test/editor.html">验收测试</a></dd>
                         <dd><a href="http://runnersoftware7.cn.utools.club/jenkins">jenkins</a></dd>
+                        <dd><a onclick="startJmeter()" >jmeter</a></dd>
 
                     </dl>
                 </li>
@@ -93,9 +94,20 @@
 <script src="/js/index.js"></script>
 <script>
     //JavaScript代码区域
-    layui.use('element', function(){
+    layui.use(['element', 'jquery', 'layer'], function(){
         var element = layui.element;
+        var layer = layui.layer;
+        var $ = layui.jquery;
 
+        window.startJmeter = function (){
+            layer.confirm('是否确定启动Jmeter', function (){
+                $.post('/test/jmeter', function (res){
+                    layer.msg(res.message)
+                })
+            })
+            event.preventDefault()
+            event.stopPropagation()
+        }
     });
 </script>
 </body>

@@ -35,4 +35,6 @@ email:
   password: pgkyvgtdqxcedjih
   #bugzilla的发件人
   sender: pengjianmim@qq.com
+jmeter:
+  path: D:/runtime/apache-jmeter-5.4.1/bin/
 

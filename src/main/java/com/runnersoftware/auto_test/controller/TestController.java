@@ -2,6 +2,7 @@ package com.runnersoftware.auto_test.controller;
 
 import com.runnersoftware.auto_test.model.Bugs;
 import com.runnersoftware.auto_test.service.BugsService;
+import com.runnersoftware.auto_test.service.ExecuteCmdService;
 import com.runnersoftware.auto_test.service.TestService;
 import com.runnersoftware.auto_test.utils.HttpUtil;
 import com.runnersoftware.auto_test.utils.R;
@@ -12,12 +13,15 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
 import java.io.IOException;
 
+import java.net.URLDecoder;
 import java.util.Map;
 
 @RestController
@@ -29,6 +33,12 @@ public class TestController {
 
     @Autowired
     private BugsService bugsService;
+
+    @Autowired
+    private ExecuteCmdService executeCmdService;
+
+    @Value("${jmeter.path}")
+    private String jmeterPath;
 
     @RequestMapping("/execute")
     public R executeTest(@RequestParam Map<String, String> map ) throws IOException {
@@ -69,5 +79,11 @@ public class TestController {
         return EntityUtils.toString(response.getEntity());
     }
 
+
+    @RequestMapping("/jmeter")
+    public R jmeter() throws Exception {
+        String s = executeCmdService.execCmd("cmd /c start jmeter.bat", new File(URLDecoder.decode(jmeterPath, "UTF-8")));
+        return R.ok().message(s);
+    }
 
 }
