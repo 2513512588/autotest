@@ -37,4 +37,5 @@ email:
   sender: pengjianmim@qq.com
 jmeter:
   path: D:/runtime/apache-jmeter-5.4.1/bin/
-
+tomcat:
+  path: D:/runtime/apache-tomcat-9.0.39/bin
