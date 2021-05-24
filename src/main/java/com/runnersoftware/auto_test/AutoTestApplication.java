@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.File;
-
 
 @SpringBootApplication
 public class AutoTestApplication implements InitializingBean {
@@ -25,6 +23,6 @@ public class AutoTestApplication implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        executeCmdService.execCmd("cmd /c start startup.bat", new File(tomcatPath));
+//        executeCmdService.execCmd("cmd /c start startup.bat", new File(tomcatPath));
     }
 }

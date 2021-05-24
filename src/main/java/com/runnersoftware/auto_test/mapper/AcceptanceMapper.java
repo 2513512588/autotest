@@ -1,6 +1,7 @@
 package com.runnersoftware.auto_test.mapper;
 
-import com.runnersoftware.auto_test.model.User;
+import com.runnersoftware.auto_test.model.Acceptance;
+import com.runnersoftware.auto_test.model.vo.AcceptanceVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -8,14 +9,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * (User)表数据库访问层
+ * (Acceptance)表数据库访问层
  *
  * @author
- * @since 2021-05-12 12:48:40
+ * @since 2021-05-24 11:06:33
  */
 @Mapper
 @Repository
-public interface UserMapper {
+public interface AcceptanceMapper {
 
     /**
      * 通过ID查询单条数据
@@ -23,7 +24,7 @@ public interface UserMapper {
      * @param id 主键
      * @return 实例对象
      */
-    User queryById(Integer id);
+    Acceptance queryById(Integer id);
 
     /**
      * 查询指定行数据
@@ -32,32 +33,35 @@ public interface UserMapper {
      * @param limit  查询条数
      * @return 对象列表
      */
-    List<User> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
+    List<Acceptance> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
 
 
     /**
      * 通过实体作为筛选条件查询
      *
-     * @param user 实例对象
+     * @param acceptance 实例对象
      * @return 对象列表
      */
-    List<User> queryAll(User user);
+    List<Acceptance> queryAll(Acceptance acceptance);
+
+    List<AcceptanceVo> queryAllVo(AcceptanceVo acceptanceVo);
 
     /**
      * 新增数据
      *
-     * @param user 实例对象
+     * @param acceptance 实例对象
      * @return 影响行数
      */
-    int insert(User user);
+    int insert(Acceptance acceptance);
+
 
     /**
      * 修改数据
      *
-     * @param user 实例对象
+     * @param acceptance 实例对象
      * @return 影响行数
      */
-    int update(User user);
+    int update(Acceptance acceptance);
 
     /**
      * 通过主键删除数据
@@ -67,6 +71,5 @@ public interface UserMapper {
      */
     int deleteById(Integer id);
 
-    User findByUsername(@Param("username") String s);
 }
 

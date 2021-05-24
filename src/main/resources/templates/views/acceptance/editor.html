@@ -10,36 +10,22 @@
 <body>
 
 <div class="layui-card">
-    <div class="layui-card-header">编辑用户信息</div>
+    <div class="layui-card-header">编辑验收信息</div>
     <div class="layui-card-body">
         <form class="layui-form" action="">
             <div class="layui-form-item">
-                <label class="layui-form-label">用户名</label>
+                <label class="layui-form-label">项目题目</label>
                 <div class="layui-input-block">
                     <input type="hidden" name="id">
-                    <input type="text" name="username" required lay-verify="required" placeholder="请输入用户名"
+                    <input type="text" name="title" required lay-verify="required" placeholder="请输入项目题目"
                            autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">密码</label>
+                <label class="layui-form-label">测试内容</label>
                 <div class="layui-input-block">
-                    <input type="password" name="password" required lay-verify="required" placeholder="请输入密码"
-                           autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">真实姓名</label>
-                <div class="layui-input-block">
-                    <input type="text" name="realName" required lay-verify="required" placeholder="请输入真实姓名"
-                           autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">电话号码</label>
-                <div class="layui-input-block">
-                    <input type="text" name="phone" required lay-verify="required|phone" placeholder="请输入电话号码"
-                           autocomplete="off" class="layui-input">
+                    <textarea placeholder="请输入测试内容" name="content" required lay-verify="required"
+                              class="layui-textarea"></textarea>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -54,13 +40,14 @@
 
 <script>
     //Demo
-    var requestURL = '/user/create'
+    var requestURL = '/acceptance/create'
 
     layui.use('form', function () {
         var form = layui.form;
 
         //监听提交
         form.on('submit(designerForm)', function (data) {
+            // layer.msg(JSON.stringify(data.field));
             $.post(requestURL, data.field, function (res) {
                 document.querySelector('.layui-form').reset()
                 layui.layer.msg(res.message)

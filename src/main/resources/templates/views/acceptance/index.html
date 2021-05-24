@@ -9,12 +9,12 @@
 </head>
 <body>
 <div class="layui-card">
-    <div class="layui-card-header">用户列表</div>
+    <div class="layui-card-header">验收列表</div>
     <div class="layui-card-body">
         <form class="layui-form">
             <div class="layui-inline">
                 <div class="layui-input-inline">
-                    <button class="layui-btn" lay-submit lay-filter="searchForm">刷新数据</button>
+                    <button class="layui-btn" lay-submit lay-filter="searchForm">刷新列表</button>
                 </div>
             </div>
         </form>
@@ -34,7 +34,7 @@
                 let tableInstance = layui.table.render({
                     elem: '#userTable'
                     , height: 500
-                    , url: '/user/findAll' //数据接口
+                    , url: '/acceptance/findAll' //数据接口
                     , page: true //开启分页
                     , parseData: function (res) {
                         res.count = res.data.count
@@ -50,16 +50,20 @@
                     }
                     , cols: [[ //表头
                         {field: 'id', title: 'ID', width: 180},
-                        {field: 'username', title: '用户名', width: 160},
-                        {field: 'realName', title: '真实姓名', width: 160},
-                        {field: 'phone', title: '电话号码', width: 160},
-                        {field: 'role', title: '角色', width: 100, templet: d => d.role === 1 ? '管理员' : '用户'},
-                        {field: 'createTime', title: '创建时间', sort: true},
+                        {field: 'title', title: '测试题目', width: 160},
+                        {field: 'content', title: '测试内容', width: 160},
+                        {field: 'username', title: '测试人员名字', width: 160},
+                        {field: 'phone', title: '测试人员电话', width: 160},
+                        {field: 'status', title: '状态', width: 100, templet: d => d.status === 1 ? '未测试' : '已测试'},
+                        {field: 'defect', title: '测试缺陷', width: 160},
+                        {field: 'testTime', title: '测试时间', sort: true, width: 180},
+                        {field: 'createTime', title: '创建时间', sort: true, width: 180},
                         {
                             title: '操作',
                             fixed: 'right',
-                            width: 180,
+                            width: 120,
                             templet: '<div><button type="button" class="layui-btn layui-btn-sm" onclick="updateModel(`{{d.id}}`)"><i class="layui-icon">&#xe642;</i></button><button type="button" class="layui-btn layui-btn-danger layui-btn-sm" onclick="removeModel(`{{d.id}}`)" ><i class="layui-icon">&#xe640;</i></button></div>'
+
                         }
                     ]]
                 });
@@ -72,10 +76,10 @@
                 }
 
                 window.updateModel = function (id) {
-                    $.post(`/user/query/${id}`, function (res) {
+                    $.post(`/acceptance/query/${id}`, function (res) {
                         layui.layer.open({
                             type: 2,
-                            content: '/views/user/editor.html', //数组第二项即吸附元素选择器或者DOM
+                            content: '/views/acceptance/test.html', //数组第二项即吸附元素选择器或者DOM
                             area: ['700px', '300px'],
                             maxmin: true,
                             title: 'INFO',
@@ -89,14 +93,14 @@
                                 $.each(res.data.model, function (key, value) {
                                     body.find(`[name=${key}]`).val(value)
                                 })
-                                iframeWin.requestURL = "/user/update"
+                                iframeWin.requestURL = "/acceptance/update"
                             },
                         });
                     })
                 }
 
                 window.removeModel = function (id) {
-                    $.get(`/user/remove/${id}`, function (res) {
+                    $.get(`/acceptance/remove/${id}`, function (res) {
                         if (res.success) {
                             layui.layer.msg(res.message)
                             tableInstance.reload()

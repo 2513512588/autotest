@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <script type="text/javascript" src="/js/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+
+<div class="layui-card">
+    <div class="layui-card-header">编辑验收信息</div>
+    <div class="layui-card-body">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">测试缺陷</label>
+                <div class="layui-input-block">
+                    <input type="hidden" name="id">
+                    <input type="hidden" name="status" value="2">
+                    <textarea placeholder="请输入测试缺陷" name="defect" required lay-verify="required"
+                              class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="designerForm">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    //Demo
+    var requestURL = '/acceptance/create'
+
+    layui.use('form', function () {
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(designerForm)', function (data) {
+            // layer.msg(JSON.stringify(data.field));
+            $.post(requestURL, data.field, function (res) {
+                document.querySelector('.layui-form').reset()
+                layui.layer.msg(res.message)
+            })
+            return false;
+        });
+
+
+    });
+
+</script>
+
+</body>
+</html>

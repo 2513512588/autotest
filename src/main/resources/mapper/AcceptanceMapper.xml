@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.runnersoftware.auto_test.mapper.AcceptanceMapper">
+
+    <resultMap type="com.runnersoftware.auto_test.model.Acceptance" id="AcceptanceMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="defect" column="defect" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="testTime" column="test_time" jdbcType="TIMESTAMP"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap type="com.runnersoftware.auto_test.model.vo.AcceptanceVo" id="AcceptanceVoMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="defect" column="defect" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="testTime" column="test_time" jdbcType="TIMESTAMP"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AcceptanceMap">
+        select id,
+               title,
+               content,
+               user_id,
+               defect,
+               create_time,
+               test_time,
+               status
+        from bugs.acceptance
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="AcceptanceMap">
+        select id,
+               title,
+               content,
+               user_id,
+               defect,
+               create_time,
+               test_time,
+               status
+        from bugs.acceptance
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="AcceptanceMap">
+        select
+        id, title, content, user_id, defect, create_time, test_time, status
+        from bugs.acceptance
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="title != null and title != ''">
+                and title = #{title}
+            </if>
+            <if test="content != null and content != ''">
+                and content = #{content}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="defect != null and defect != ''">
+                and defect = #{defect}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="testTime != null">
+                and test_time = #{testTime}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllVo" resultMap="AcceptanceVoMap">
+        select
+        a.id, title, content, user_id, defect, a.create_time, test_time, status,
+        username, phone
+        from bugs.acceptance a LEFT JOIN user u on a.user_id = u.id
+        <where>
+            <if test="id != null">
+                and a.id = #{id}
+            </if>
+            <if test="title != null and title != ''">
+                and title = #{title}
+            </if>
+            <if test="content != null and content != ''">
+                and content = #{content}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="defect != null and defect != ''">
+                and defect = #{defect}
+            </if>
+            <if test="createTime != null">
+                and a.create_time = #{createTime}
+            </if>
+            <if test="testTime != null">
+                and test_time = #{testTime}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into bugs.acceptance(title, content, user_id, defect, create_time, test_time)
+        values (#{title}, #{content}, #{userId}, #{defect}, #{createTime}, #{testTime})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update bugs.acceptance
+        <set>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="content != null and content != ''">
+                content = #{content},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="defect != null and defect != ''">
+                defect = #{defect},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="testTime != null">
+                test_time = #{testTime},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from bugs.acceptance
+        where id = #{id}
+    </delete>
+
+</mapper>
+

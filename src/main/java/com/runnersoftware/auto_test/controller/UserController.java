@@ -1,15 +1,13 @@
 package com.runnersoftware.auto_test.controller;
 
-import com.runnersoftware.auto_test.service.UserService;
-import org.springframework.web.bind.annotation.*;
 import com.runnersoftware.auto_test.model.User;
+import com.runnersoftware.auto_test.service.UserService;
 import com.runnersoftware.auto_test.utils.R;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * (User)表控制层
@@ -46,7 +44,7 @@ public class UserController {
 
     @PostMapping("/create")
     public R insertModel(User user) {
-        userService.insert(user);
+        userService.insert(user.setRole(2));
         return R.ok();
     }
 

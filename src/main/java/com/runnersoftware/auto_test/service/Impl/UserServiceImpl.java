@@ -1,17 +1,18 @@
 package com.runnersoftware.auto_test.service.Impl;
 
-import com.runnersoftware.auto_test.model.User;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.runnersoftware.auto_test.mapper.UserMapper;
+import com.runnersoftware.auto_test.model.User;
+import com.runnersoftware.auto_test.model.dto.SecurityUser;
 import com.runnersoftware.auto_test.service.UserService;
-import com.runnersoftware.auto_test.utils.ManagerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -63,11 +64,10 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User insert(User user) {
-        user.setCreateTime(new Date());
-        if (!StringUtils.isEmpty(user.getPassword())){
+        if (!StringUtils.isEmpty(user.getPassword())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        this.userMapper.insert(user);
+        this.userMapper.insert(user.setCreateTime(new Date()));
         return user;
     }
 
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User update(User user) {
-        if (!StringUtils.isEmpty(user.getPassword())){
+        if (!StringUtils.isEmpty(user.getPassword())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         this.userMapper.update(user);
@@ -117,14 +117,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userMapper.findByUsername(s);
-        if (!ManagerProperties.USERNAME.equals(s) && user == null){
-           throw new UsernameNotFoundException("用户不存在");
+        if (user == null) {
+            throw new UsernameNotFoundException("用户不存在");
         }
-        if (ManagerProperties.USERNAME.equals(s)){
-            return new org.springframework.security.core.userdetails.User(ManagerProperties.USERNAME, ManagerProperties.PASSWORD, Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")));
-        }else {
-            return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+        Collection<GrantedAuthority> collection = new ArrayList<>();
+        if (1 == user.getRole()) {
+            collection.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        } else if (2 == user.getRole()) {
+            collection.add(new SimpleGrantedAuthority("ROLE_USER"));
         }
-
+        return new SecurityUser(user, collection);
     }
 }

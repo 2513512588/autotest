@@ -4,17 +4,23 @@
 
     <resultMap type="com.runnersoftware.auto_test.model.User" id="UserMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
         <result property="password" column="password" jdbcType="VARCHAR"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="realName" column="real_name" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="role" column="role" jdbcType="INTEGER"/>
     </resultMap>
 
     <!--查询单个-->
     <select id="queryById" resultMap="UserMap">
         select id,
+               username,
                password,
                create_time,
-               username
+               real_name,
+               phone,
+               role
         from bugs.user
         where id = #{id}
     </select>
@@ -22,9 +28,12 @@
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="UserMap">
         select id,
+               username,
                password,
                create_time,
-               username
+               real_name,
+               phone,
+               role
         from bugs.user
         limit #{offset}, #{limit}
     </select>
@@ -32,11 +41,14 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="UserMap">
         select
-        id, password, create_time, username
+        id, username, password, create_time, real_name, phone, role
         from bugs.user
         <where>
             <if test="id != null">
                 and id = #{id}
+            </if>
+            <if test="username != null and username != ''">
+                and username = #{username}
             </if>
             <if test="password != null and password != ''">
                 and password = #{password}
@@ -44,56 +56,51 @@
             <if test="createTime != null">
                 and create_time = #{createTime}
             </if>
-            <if test="username != null and username != ''">
-                and username = #{username}
+            <if test="realName != null and realName != ''">
+                and real_name = #{realName}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+            <if test="role != null">
+                and role = #{role}
             </if>
         </where>
-    </select>
-    <select id="findByUsername" resultType="com.runnersoftware.auto_test.model.User"
-            parameterType="java.lang.String">
-        select id,
-               password,
-               create_time,
-               username
-        from bugs.user where username = #{username}
     </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into bugs.user(password, create_time, username)
-        values (#{password}, #{createTime}, #{username})
+        insert into bugs.user(username, password, create_time, real_name, phone, role)
+        values (#{username}, #{password}, #{createTime}, #{realName}, #{phone}, #{role})
     </insert>
 
-    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into bugs.user(password, create_time, username)
-        values
-        <foreach collection="entities" item="entity" separator=",">
-            (#{entity.password}, #{entity.createTime}, #{entity.username})
-        </foreach>
-    </insert>
-
-    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into bugs.user(password, create_time, username)
-        values
-        <foreach collection="entities" item="entity" separator=",">
-            (#{entity.password}, #{entity.createTime}, #{entity.username})
-        </foreach>
-        on duplicate key update
-        password = values(password) , create_time = values(create_time) , username = values(username)
-    </insert>
+    <select id="findByUsername" resultMap="UserMap">
+        SELECT id, username, password, create_time, real_name, phone, role
+        FROM user
+        WHERE username = #{username}
+    </select>
 
     <!--通过主键修改数据-->
     <update id="update">
         update bugs.user
         <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
             <if test="password != null and password != ''">
                 password = #{password},
             </if>
             <if test="createTime != null">
                 create_time = #{createTime},
             </if>
-            <if test="username != null and username != ''">
-                username = #{username},
+            <if test="realName != null and realName != ''">
+                real_name = #{realName},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="role != null">
+                role = #{role},
             </if>
         </set>
         where id = #{id}
