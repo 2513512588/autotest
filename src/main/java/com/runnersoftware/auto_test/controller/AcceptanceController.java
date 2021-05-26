@@ -1,10 +1,12 @@
 package com.runnersoftware.auto_test.controller;
 
 import com.runnersoftware.auto_test.model.Acceptance;
+import com.runnersoftware.auto_test.model.Bugs;
 import com.runnersoftware.auto_test.model.User;
 import com.runnersoftware.auto_test.model.dto.SecurityUser;
 import com.runnersoftware.auto_test.model.vo.AcceptanceVo;
 import com.runnersoftware.auto_test.service.AcceptanceService;
+import com.runnersoftware.auto_test.service.BugsService;
 import com.runnersoftware.auto_test.utils.R;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +31,9 @@ public class AcceptanceController {
     @Resource
     private AcceptanceService acceptanceService;
 
+    @Resource
+    private BugsService bugsService;
+
     @GetMapping("/findAll")
     public R findAll(@RequestParam(value = "page", defaultValue = "1", required = false) int pageNum,
                      @RequestParam(value = "limit", defaultValue = "10", required = false) int pageSize,
@@ -49,6 +54,7 @@ public class AcceptanceController {
     public R insertModel(Acceptance acceptance) {
         User user = ((SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
         acceptanceService.insert(acceptance.setUserId(user.getId()));
+        bugsService.insert(Bugs.buildDefault(acceptance.getContent()));
         return R.ok();
     }
 
