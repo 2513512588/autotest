@@ -14,6 +14,7 @@ import org.apache.http.util.EntityUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 
 import java.net.URLDecoder;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -58,18 +60,21 @@ public class TestController {
     }
 
     @RequestMapping("/unitTest")
-    public R executeUnitTest(@RequestParam Map<String, Object> map) {
-        String args =  map.get("args").toString();
-        args = args.replace("，", ",");
-        Object[] split = args.split(",");
-        try {
-            return R.auto(testService.comile(map.get("expect"), map.get("code").toString(), split));
-        } catch (Exception e) {
-            e.printStackTrace();
-            Bugs bugs = Bugs.buildDefault("测试代码异常! ==== "+ e.getMessage());
-            bugsService.insert(bugs);
-            return R.error().message("测试代码异常! ==== "+ e.getMessage());
+    public R executeUnitTest(@RequestBody List<Map<String, Object>> params) {
+        for (Map<String, Object> map : params) {
+            String args =  map.get("args").toString();
+            args = args.replace("，", ",");
+            Object[] split = args.split(",");
+            try {
+                return R.auto(testService.comile(map.get("expect"), map.get("code").toString(), split));
+            } catch (Exception e) {
+                e.printStackTrace();
+                Bugs bugs = Bugs.buildDefault("测试代码异常! ==== "+ e.getMessage());
+                bugsService.insert(bugs);
+                return R.error().message("测试代码异常! ==== "+ e.getMessage());
+            }
         }
+        return R.ok();
     }
 
     @RequestMapping("/bugzilla")

@@ -1,12 +1,11 @@
 package com.runnersoftware.auto_test.service.Impl;
 
 import com.runnersoftware.auto_test.service.TestService;
+import org.apache.catalina.connector.OutputBuffer;
 import org.springframework.stereotype.Service;
 
 import javax.tools.*;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.nio.ByteBuffer;
@@ -46,18 +45,29 @@ public class UnitTestServiceImpl implements TestService{
 
         Iterable<? extends JavaFileObject> files = Collections.singletonList(javaFileObject);
 
+        StringWriter stringWriter = new StringWriter();
+
+        DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+
+
         // 通过一些选项，javafileObject， classPath 来获取JvaComiler.ComilationTask
-        JavaCompiler.CompilationTask task = javaCompiler.getTask(null,
-                standardJavaFileManager, null, options, null, files);
+        JavaCompiler.CompilationTask task = javaCompiler.getTask(stringWriter,
+                standardJavaFileManager, diagnostics, options, null, files);
 
         // 将Class 在内存中编译
         Boolean result = task.call();
+
+        for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
+            System.out.println("diagnostics = " + diagnostic.getLineNumber());
+
+        }
+
 
         if (!result){
             throw new Exception("编译失败!");
         }
 
-        System.out.println();
+//        System.out.println(new CompilationResult(stringWriter.toString()));
 
         // 通过类名 加载class
         ClassLoader classLoader = new ClassClassLoader(getClass().getClassLoader());

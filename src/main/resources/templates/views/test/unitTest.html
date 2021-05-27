@@ -13,52 +13,48 @@
     <div class="layui-card-header">编辑测试信息</div>
     <div class="layui-card-body">
         <form class="layui-form layui-form-pane" action="">
-            <div class="layui-form-item">
-                <label class="layui-form-label">标题</label>
-                <div class="layui-input-block">
-                    <input type="hidden" name="id">
-                    <input type="text" name="name"  placeholder="请输入测试名字"
-                           autocomplete="off" class="layui-input">
-                </div>
-            </div>
-<!--            <div class="layui-form-item">-->
-<!--                <label class="layui-form-label">描述</label>-->
-<!--                <div class="layui-input-block">-->
-<!--                    <textarea placeholder="选填" name="data"-->
-<!--                              class="layui-textarea"></textarea>-->
-<!--                </div>-->
-<!--            </div>-->
-            <div class="layui-form-item">
-                <label class="layui-form-label">测试代码</label>
-                <div class="layui-input-block">
-                    <input type="text" disabled readonly
-                           autocomplete="off" class="layui-input" value="public static Object test(Object...args) {">
-                    <textarea name="code" required lay-verify="required" class="layui-textarea" > return 1 + 2 + Integer.parseInt(args[0].toString());
+            <div class="form-container">
+                <div class="form-template">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">标题</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name"  placeholder="请输入测试名字"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">测试代码</label>
+                        <div class="layui-input-block">
+                            <input type="text" disabled readonly
+                                   autocomplete="off" class="layui-input" value="public static Object test(Object...args) {">
+                            <textarea name="code" required lay-verify="required" class="layui-textarea" > return 1 + 2 + Integer.parseInt(args[0].toString());
                     </textarea>
-                    <input type="text" disabled readonly
-                           autocomplete="off" class="layui-input" value="}">
-                </div>
+                            <input type="text" disabled readonly
+                                   autocomplete="off" class="layui-input" value="}">
+                        </div>
 
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">参数</label>
-                <div class="layui-input-block">
-                    <input type="hidden" name="id">
-                    <input type="text" name="args" required lay-verify="required" placeholder="请输入参数,多个用逗号分割"
-                           autocomplete="off" class="layui-input" value="1" >
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">期望值</label>
-                <div class="layui-input-block">
-                    <input type="hidden" name="id">
-                    <input type="text" name="expect" required lay-verify="required" placeholder="请输入返回期望值"
-                           autocomplete="off" class="layui-input" value="4" >
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">参数</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="args" required lay-verify="required" placeholder="请输入参数,多个用逗号分割"
+                                   autocomplete="off" class="layui-input" value="1" >
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">期望值</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="expect" required lay-verify="required" placeholder="请输入返回期望值"
+                                   autocomplete="off" class="layui-input" value="4" >
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
                     <button class="layui-btn" lay-submit lay-filter="unitTestForm">立即提交</button>
+                    <button class="layui-btn" type="button" lay-even="addTest">添加测试</button>
+
                     <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                 </div>
             </div>
@@ -72,9 +68,11 @@
     //Demo
     var requestURL = '/test/unitTest'
 
-    layui.use(['form', 'layer'], function () {
+    layui.use(['form', 'layer', 'jquery'], function () {
         var form = layui.form;
         var layer = layui.layer;
+        var $ = layui.jquery
+
 
         let loading = null
 
@@ -83,13 +81,51 @@
         form.on('submit(unitTestForm)', function (data) {
             // layer.msg(JSON.stringify(data.field));
             loading = layer.load()
-            $.post(requestURL, data.field, function (res) {
-                document.querySelector('.layui-form').reset()
-                layui.layer.msg(res.message)
-                layer.close(loading)
+            $.ajax(requestURL,{
+                data: JSON.stringify(params()),
+                type: 'POST',
+                contentType: 'application/json;charset=utf-8',
+                success: function (res) {
+                    // document.querySelector('.layui-form').reset()
+                    layui.layer.msg(res.message)
+                    layer.close(loading)
+                }
             })
             return false;
         });
+
+
+        function params(){
+            let result = []
+            $('.form-template').each((index, item) =>{
+                let obj = {}
+                $(item).find('[name]').each((idx, el) =>{
+                    if (el.name){
+                        obj[el.name] = el.value
+                    }
+                })
+                result.push(JSON.parse(JSON.stringify(obj)))
+            })
+            return result
+        }
+
+        let html = $('.form-container .form-template').get(0).innerHTML
+
+        $('.layui-btn[lay-even="addTest"]').on('click', function () {
+           let template = document.createElement('div')
+           template.classList.add('form-template')
+           template.innerHTML += html + ` <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-danger" type="button" onclick="removeThis(this)">删除</button>
+                </div>
+            </div>`
+           $('.form-container').append(template)
+        });
+
+        window.removeThis = function (e){
+            e.parentNode.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode.parentNode)
+        }
+
 
         $.get("/control/findAll?page=1&limit=9999999", function (res){
             res.data.rows.forEach(item =>{

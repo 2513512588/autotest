@@ -43,6 +43,15 @@
                 </div>
             </div>
             <div class="layui-form-item">
+                <label class="layui-form-label">用户权限</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="role" value="1" title="单元测试" checked>
+                    <input type="checkbox" name="role"  value="2" title="集成测试" >
+                    <input type="checkbox" name="role" value="3" title="性能测试">
+                    <input type="checkbox" name="role" value="4" title="验收测试">
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <div class="layui-input-block">
                     <button class="layui-btn" lay-submit lay-filter="designerForm">立即提交</button>
                     <button type="reset" class="layui-btn layui-btn-primary">重置</button>
@@ -56,11 +65,13 @@
     //Demo
     var requestURL = '/user/create'
 
-    layui.use('form', function () {
+    layui.use(['form', 'jquery'], function () {
         var form = layui.form;
+        var $ = layui.jquery;
 
         //监听提交
         form.on('submit(designerForm)', function (data) {
+            data.field.role = JSON.stringify($('form').serializeArray().filter(item => item.name === "role").map(item => item.value))
             $.post(requestURL, data.field, function (res) {
                 document.querySelector('.layui-form').reset()
                 layui.layer.msg(res.message)

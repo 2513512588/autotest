@@ -35,7 +35,16 @@
 
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul id="nav" class="layui-nav layui-nav-tree" lay-filter="test">
-                <li class="layui-nav-item layui-nav-itemed">
+                <li class="layui-nav-item layui-nav-itemed" >
+                    <a href="javascript:void(0);">
+                        <i class="layui-icon">&#xe857;</i>
+                        <em>首页</em>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/views/index/index.html">流程介绍</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
                     <a href="javascript:void(0);">
                         <i class="layui-icon">&#xe857;</i>
                         <em>用户管理</em>
@@ -51,17 +60,11 @@
                         <em>测试管理</em>
                     </a>
                     <dl class="layui-nav-child">
-                        <!--                        <dd><a href="/views/test/index.html">测试记录</a></dd>-->
-                        <!--                        <dd><a href="/views/test/editor.html">添加测试</a></dd>-->
-                        <dd><a href="/views/test/unitTest.html">单元测试</a></dd>
-                        <dd><a href="/views/test/editor.html">集成测试</a></dd>
-                        <dd><a href="/views/test/editor.html">性能测试</a></dd>
-                        <dd><a href="/views/test/editor.html">验收测试</a></dd>
-                        <dd><a href="/views/acceptance/index.html">验收记录</a></dd>
-                        <dd><a href="/views/acceptance/editor.html">添加验收记录</a></dd>
-                        <dd><a href="http://runnersoftware7.cn.utools.club/jenkins">jenkins</a></dd>
-                        <dd><a onclick="startJmeter()">jmeter</a></dd>
-
+                        <dd><a href="/views/test/unitTest.html" th:if="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'', ''ROLE_UNIT'')')}" >单元测试</a></dd>
+                        <dd><a href="/views/acceptance/index.html" th:if="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'', ''ROLE_ACCEPTANCE'')')}">验收记录</a></dd>
+                        <dd><a href="/views/acceptance/editor.html"  th:if="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'', ''ROLE_ACCEPTANCE'')')}" >添加验收记录</a></dd>
+                        <dd><a href="http://runnersoftware7.cn.utools.club/jenkins" th:if="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'', ''ROLE_INTEGRATE'')')}" >集成测试</a></dd>
+                        <dd><a onclick="startJmeter()" th:if="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'', ''ROLE_PERFORMANCE'')')}" >性能测试</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
@@ -76,15 +79,7 @@
                                onclick="location.href='http://runnersoftware10.cn.utools.club'">Bugzilla</a></dd>
                     </dl>
                 </li>
-<!--                <li class="layui-nav-item">-->
-<!--                    <a href="javascript:void(0);">-->
-<!--                        <i class="layui-icon">&#xe857;</i>-->
-<!--                        <em>验收管理</em>-->
-<!--                    </a>-->
-<!--                    <dl class="layui-nav-child">-->
-<!--                        -->
-<!--                    </dl>-->
-<!--                </li>-->
+
             </ul>
         </div>
     </div>

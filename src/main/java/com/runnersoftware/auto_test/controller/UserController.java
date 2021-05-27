@@ -1,5 +1,6 @@
 package com.runnersoftware.auto_test.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.runnersoftware.auto_test.model.User;
 import com.runnersoftware.auto_test.service.UserService;
 import com.runnersoftware.auto_test.utils.R;
@@ -44,7 +45,7 @@ public class UserController {
 
     @PostMapping("/create")
     public R insertModel(User user) {
-        userService.insert(user.setRole(2));
+        userService.insert(user);
         return R.ok();
     }
 

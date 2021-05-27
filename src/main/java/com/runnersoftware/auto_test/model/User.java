@@ -31,6 +31,7 @@ public class User implements Serializable {
 
     private String phone;
 
-    private Integer role;
+    private String role;
+
 
 }

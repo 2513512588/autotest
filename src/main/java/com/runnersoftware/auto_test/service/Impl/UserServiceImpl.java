@@ -1,5 +1,7 @@
 package com.runnersoftware.auto_test.service.Impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.runnersoftware.auto_test.mapper.UserMapper;
@@ -121,10 +123,19 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("用户不存在");
         }
         Collection<GrantedAuthority> collection = new ArrayList<>();
-        if (1 == user.getRole()) {
-            collection.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        } else if (2 == user.getRole()) {
-            collection.add(new SimpleGrantedAuthority("ROLE_USER"));
+        JSONArray jsonArray = JSONArray.parseArray(user.getRole());
+        for (Object o : jsonArray) {
+            if (o.equals(1)) {
+                collection.add(new SimpleGrantedAuthority("ROLE_UNIT"));
+            } else if (o.equals(2)) {
+                collection.add(new SimpleGrantedAuthority("ROLE_INTEGRATE"));
+            } else if (o.equals(3)) {
+                collection.add(new SimpleGrantedAuthority("ROLE_PERFORMANCE"));
+            } else if (o.equals(4)) {
+                collection.add(new SimpleGrantedAuthority("ROLE_ACCEPTANCE"));
+            } else if (o.equals(5)) {
+                collection.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            }
         }
         return new SecurityUser(user, collection);
     }

@@ -23,15 +23,15 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `acceptance`;
 CREATE TABLE `acceptance` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '项目题目',
-  `content` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '测试内容',
+  `title` varchar(255) NOT NULL COMMENT '项目题目',
+  `content` varchar(255) NOT NULL COMMENT '测试内容',
   `user_id` int DEFAULT NULL COMMENT '测试用户',
-  `defect` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '测试缺陷',
+  `defect` varchar(255) DEFAULT NULL COMMENT '测试缺陷',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `test_time` datetime DEFAULT NULL COMMENT '测试时间',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态 1-未测试 2-已测试',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3;
 
 -- ----------------------------
 -- Records of acceptance

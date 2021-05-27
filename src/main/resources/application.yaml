@@ -5,7 +5,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/bugs?characterEncoding=UTF-8&serverTimezone=GMT%2b8
     username: root
-    password: root
+    password: 960918
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -27,9 +27,6 @@ server:
   port: 8095
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
-manager:
-  username: root
-  password: $2a$10$ZKSOz0KVH8xCGF9Osy0cleVaLixa5ipoaFseVzUWMzdGJnKbwKUNq
 email:
   username: 2513512588@qq.com
   password: pgkyvgtdqxcedjih
@@ -38,4 +35,4 @@ email:
 jmeter:
   path: D:/runtime/apache-jmeter-5.4.1/bin/
 tomcat:
-  path: D:/runtime/apache-tomcat-9.0.39/bin
+  path: D:/runtime/apache-tomcat-9.0.39/bin/
