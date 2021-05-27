@@ -66,7 +66,8 @@ public class TestController {
             args = args.replace("，", ",");
             Object[] split = args.split(",");
             try {
-                return R.auto(testService.comile(map.get("expect"), map.get("code").toString(), split));
+                testService.comile(map.get("expect"), map.get("code").toString(), split)
+//                return R.auto();
             } catch (Exception e) {
                 e.printStackTrace();
                 Bugs bugs = Bugs.buildDefault("测试代码异常! ==== "+ e.getMessage());
@@ -74,7 +75,7 @@ public class TestController {
                 return R.error().message("测试代码异常! ==== "+ e.getMessage());
             }
         }
-        return R.ok();
+        return R.ok().message("测试通过");
     }
 
     @RequestMapping("/bugzilla")
