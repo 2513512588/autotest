@@ -66,7 +66,7 @@ public class TestController {
             args = args.replace("，", ",");
             Object[] split = args.split(",");
             try {
-                testService.comile(map.get("expect"), map.get("code").toString(), split)
+                testService.comile(map.get("expect"), map.get("code").toString(), split);
 //                return R.auto();
             } catch (Exception e) {
                 e.printStackTrace();
