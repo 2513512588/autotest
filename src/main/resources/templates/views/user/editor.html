@@ -53,7 +53,7 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit lay-filter="designerForm">立即提交</button>
+                    <button class="layui-btn" lay-submit lay-filter="testForm">立即提交</button>
                     <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                 </div>
             </div>
@@ -70,8 +70,12 @@
         var $ = layui.jquery;
 
         //监听提交
-        form.on('submit(designerForm)', function (data) {
-            data.field.role = JSON.stringify($('form').serializeArray().filter(item => item.name === "role").map(item => item.value))
+        form.on('submit(testForm)', function (data) {
+            let checkArr = [];
+            $('input[type=checkbox]:checked').each(function() {
+                checkArr.push(parseInt($(this).val()));
+            });
+            data.field.role = JSON.stringify(checkArr)
             $.post(requestURL, data.field, function (res) {
                 document.querySelector('.layui-form').reset()
                 layui.layer.msg(res.message)
