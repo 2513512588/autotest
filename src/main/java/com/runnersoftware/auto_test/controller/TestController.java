@@ -6,6 +6,7 @@ import com.runnersoftware.auto_test.service.ExecuteCmdService;
 import com.runnersoftware.auto_test.service.TestService;
 import com.runnersoftware.auto_test.utils.HttpUtil;
 import com.runnersoftware.auto_test.utils.R;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -23,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -61,19 +63,22 @@ public class TestController {
 
     @RequestMapping("/unitTest")
     public R executeUnitTest(@RequestBody List<Map<String, Object>> params) {
+        List<String> result = new ArrayList<>();
         for (Map<String, Object> map : params) {
             String args =  map.get("args").toString();
             args = args.replace("，", ",");
             Object[] split = args.split(",");
             try {
                 testService.comile(map.get("expect"), map.get("code").toString(), split);
-//                return R.auto();
             } catch (Exception e) {
                 e.printStackTrace();
-                Bugs bugs = Bugs.buildDefault("测试代码异常! ==== "+ e.getMessage());
+                Bugs bugs = Bugs.buildDefault(e.getMessage(), map.get("code").toString());
                 bugsService.insert(bugs);
-                return R.error().message("测试代码异常! ==== "+ e.getMessage());
+                result.add(e.getMessage());
             }
+        }
+        if (result.size() > 0){
+            return R.ok().message(StringUtils.join(result, "<br />"));
         }
         return R.ok().message("测试通过");
     }

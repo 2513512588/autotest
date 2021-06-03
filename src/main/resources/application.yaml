@@ -29,7 +29,7 @@ mybatis:
   mapper-locations: classpath:/mapper/*.xml
 email:
   username: 2513512588@qq.com
-  password: pgkyvgtdqxcedjih
+  password:
   #bugzilla的发件人
   sender: pengjianmim@qq.com
 jmeter:

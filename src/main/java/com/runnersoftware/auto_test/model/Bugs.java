@@ -76,6 +76,10 @@ public class Bugs implements Serializable {
     }
 
     public static Bugs buildDefault(String shortDesc) {
+        return buildDefault(shortDesc, "");
+    }
+
+    public static Bugs buildDefault(String shortDesc, String statusWhiteboard) {
         Bugs bugs = new Bugs();
         bugs.setShortDesc(shortDesc);
         bugs.setAssignedTo("1");

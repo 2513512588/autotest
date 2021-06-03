@@ -2,6 +2,7 @@ package com.runnersoftware.auto_test.service.Impl;
 
 import com.runnersoftware.auto_test.service.TestService;
 import org.apache.catalina.connector.OutputBuffer;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.tools.*;
@@ -57,14 +58,10 @@ public class UnitTestServiceImpl implements TestService{
         // 将Class 在内存中编译
         Boolean result = task.call();
 
-        for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
-            System.out.println("diagnostics = " + diagnostic.getLineNumber());
-
-        }
-
+        String str = StringUtils.join(diagnostics.getDiagnostics(), "");
 
         if (!result){
-            throw new Exception("编译失败!");
+            throw new Exception(str);
         }
 
 //        System.out.println(new CompilationResult(stringWriter.toString()));
